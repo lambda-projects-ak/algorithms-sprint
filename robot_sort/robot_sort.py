@@ -110,8 +110,6 @@ class SortingRobot:
                 self.swap_item()
                 # if swapped, turn on light
                 self.set_light_on()
-                print("item swap, light is on")
-            print(self._position)
         # when at right wall, swap item if it's larger than current position
         if self.compare_item() == 1:
             self.swap_item()
@@ -122,7 +120,6 @@ class SortingRobot:
         # Robot has moved all the way to the right with largest number
         # now sort smallest left while robot can move left
         while self.can_move_left():
-            print("MOVE LEFT LOOP RUNS")
             # # turn light off
             self.set_light_off()
             # move left, index 1
@@ -136,7 +133,6 @@ class SortingRobot:
                 self.set_light_on()
                 print("item swap, light is on")
 
-            print(self._position)
         # when at left wall, swap item if it's smaller than current position
         print(self._list)
         if self.compare_item() == None:
@@ -160,11 +156,9 @@ class SortingRobot:
             self.sort_largest_right()
             self.sort_smallest_left()
 
-            print(self._position)
-            if self.light_is_on:
-                self.swap_item()
-                self.light_is_on()
-        print(self.light_is_on())
+        if self.compare_item() == None and self.can_move_left() == False:
+            self.swap_item()
+            self.set_light_off()
 
 
 if __name__ == "__main__":
