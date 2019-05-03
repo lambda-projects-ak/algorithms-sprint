@@ -94,83 +94,73 @@ class SortingRobot:
         """
         return self._light == "ON"
 
-    def sort_largest_right(self):
-         # while robot can move right
-        while self.can_move_right():
-            print("MOVE RIGHT LOOP RUNS")
-            # turn light off
-            self.set_light_off()
-            # start at left wall, index 0
-            # move right, index 1
+    def sort_right(self):
+        # if current item > list item, swap and turn on light
+        if self.compare_item() == 1:
+            self.swap_item()
+            self.move_left()
+            self.swap_item()
+            self.set_light_on()
+
+        # if duplicate item, move right and turn on light
+        elif self.compare_item() == 0:
             self.move_right()
-            # compare index 0 to index 1
-            # print(self.compare_item())
-            if self.compare_item() == -1:
-                # if item < position item, swap
-                self.swap_item()
-                # if swapped, turn on light
-                self.set_light_on()
-        # when at right wall, swap item if it's larger than current position
+            self.set_light_on()
+
+        # if current item < list item, swap item
+        elif self.compare_item() == -1:
+            self.swap_item()
+            self.move_right()
+            self.set_light_on()
+            # rerun sort_right loop while robot can move right
+
+        # Never bring None to the right
+
+    def sort_left(self):
+        # if current item < list item, swap and turn light on
         if self.compare_item() == 1:
             self.swap_item()
             self.set_light_on()
-            print("swap last item with largest, light on:", self.light_is_on())
 
-    def sort_smallest_left(self):
-        # Robot has moved all the way to the right with largest number
-        # now sort smallest left while robot can move left
-        while self.can_move_left():
-            # # turn light off
-            self.set_light_off()
-            # move left, index 1
+        # move smallest number to the left
+        while self.compare_item() != None:
             self.move_left()
-
-            # print(self.compare_item())
-            if self.compare_item() == 1:
-                # if item > position item, swap
-                self.swap_item()
-                # if swapped, turn on light
-                self.set_light_on()
-                print("item swap, light is on")
-
-        # when at left wall, swap item if it's smaller than current position
-        print(self._list)
-        if self.compare_item() == None:
             self.swap_item()
-            self.set_light_on()
-            print("swap first item with lowest, light on:", self.light_is_on())
 
     def sort(self):
         """
         Sort the robot's list.
         """
-        # Starting with modified bubble sort approach
 
-        # pick up first item and turn light on
+        # pick up initial item and indicate swap
         self.swap_item()
         self.set_light_on()
-        print("Initial pickup, light on:", self.light_is_on())
-        # while light is on
-        while self.light_is_on():
-            print("LIGHT IS ON, START MAIN LOOP")
-            self.sort_largest_right()
-            self.sort_smallest_left()
+        self.move_right()
 
-        if self.compare_item() == None and self.can_move_left() == False:
-            self.swap_item()
+        # run sort while light is on
+        while self.light_is_on():
+            # turn light off to determine if a sort has occurred during a complete pass
             self.set_light_off()
+
+            # when getting back to the initial position, swap number for none
+            # don't count this as a sort, otherwise it would be an infinite loop, this was the challenge in the first pass solution I tried.
+            if self.compare_item() == None:
+                self.swap_item()
+                self.move_right()
+
+            # if robot can move right, sort larger numbers to the right
+            if self.can_move_right():
+                self.sort_right()
+
+            else:
+                self.sort_left()
+
+        # loop ends when robot makes a pass without a swap, ie. no light on
 
 
 if __name__ == "__main__":
     # Test our your implementation from the command line
     # with `python robot_sort.py`
-
-    # test = [3, 4, 5, 2, 1]
-    # robot = SortingRobot(test)
-
-    # print(test)
-    # robot.sort()
-    # print(robot._list)
 
     l = [15, 41, 58, 49, 26, 4, 28, 8, 61, 60, 65, 21, 78, 14, 35, 90, 54, 5, 0, 87, 82, 96, 43, 92, 62, 97, 69, 94, 99, 93, 76, 47, 2, 88, 51, 40, 95, 6, 23, 81, 30, 19, 25, 91, 18, 68, 71, 9, 66, 1,
          45, 33, 3, 72, 16, 85, 27, 59, 64, 39, 32, 24, 38, 84, 44, 80, 11, 73, 42, 20, 10, 29, 22, 98, 17, 48, 52, 67, 53, 74, 77, 37, 63, 31, 7, 75, 36, 89, 70, 34, 79, 83, 13, 57, 86, 12, 56, 50, 55, 46]
