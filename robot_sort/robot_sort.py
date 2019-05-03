@@ -119,29 +119,49 @@ class SortingRobot:
                 if self.compare_item() == -1:
                     # if item < position item, swap
                     self.swap_item()
-                    self.set_light_on()
                     # if swapped, turn on light
-                    # print("can move right: ", self.can_move_right())
+                    self.set_light_on()
                 elif self.compare_item() == 1:
                     pass
                 elif self.compare_item() == 0:
                     pass
-            if self.compare_item() == 1 and not self.can_move_right():
+            # when at right wall, swap item if it's larger than current position
+            if self.compare_item() == 1:
                 self.swap_item()
                 self.set_light_on()
-            # repeat until robot hits right wall
 
-            # while robot can move left
-            # turn light off
-            # when hitting left wall robot will have a number in hand
-            # compare number to index len(arr) - 1
-            # if len(arr) - 1 is higher then held number, swap
-            # move left
-            # compare item
-            # if item held < current position item, swap
-            # if swapped, turn on light
-            # repeat until robot hits left wall
+            # Robot has moved all the way to the right with largest number
+            # now sort smallest left while robot can move left
+            while self.can_move_left():
+                # turn light off
+                self.set_light_off()
+                # # when robot reaches left wall, swap item with None
+                # if self._position == 0:
+                #     self.swap_item()
+                # move left, index 1
+                self.move_left()
+                #
+                print(self.compare_item())
+                if self.compare_item() == 1:
+                    # if item > position item, swap
+                    self.swap_item()
+                    # if swapped, turn on light
+                    self.set_light_on()
+                elif self.compare_item() == -1:
+                    pass
+                elif self.compare_item() == 0:
+                    pass
+            # when at left wall, swap item if it's smaller than current position
+            if self.compare_item() == -1:
+                self.swap_item()
+                self.set_light_on()
 
+            elif self.compare_item() == None:
+                self.swap_item()
+                self.set_light_on()
+
+            # ------ not final code ------
+            # turn off light after one loop to break infinite loop
             self.set_light_off()
 
         # stop loop after a full pass of not sorting, robot will be holding index 0 item (lowest)
