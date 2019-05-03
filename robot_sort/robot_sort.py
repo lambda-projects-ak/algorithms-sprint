@@ -100,44 +100,66 @@ class SortingRobot:
         """
         # Starting with modified bubble sort approach
 
-# turn light on
-# while light is on
-    # while robot can move right
-    # turn light off
-    # start at left wall, index 0
-    # pick up item, index 0
-    # move right, index 1
-    # compare index 0 to index 1
-    # if index 0 > index 1, swap
-    # if swapped, turn on light
-    # repeat until robot hits right wall
+        # turn light on
+        self.set_light_on()
+        # while light is on
+        while self.light_is_on():
+            # while robot can move right
+            while self.can_move_right():
+                # turn light off
+                self.set_light_off()
+                # start at left wall, index 0
+                # pick up item, index 0
+                if self._position == 0:
+                    self.swap_item()
+                # move right, index 1
+                self.move_right()
+                # compare index 0 to index 1
+                print(self.compare_item())
+                if self.compare_item() == -1:
+                    # if item < position item, swap
+                    self.swap_item()
+                    self.set_light_on()
+                    # if swapped, turn on light
+                    # print("can move right: ", self.can_move_right())
+                elif self.compare_item() == 1:
+                    pass
+                elif self.compare_item() == 0:
+                    pass
+            if self.compare_item() == 1 and not self.can_move_right():
+                self.swap_item()
+                self.set_light_on()
+            # repeat until robot hits right wall
 
-    # while robot can move left
-    # turn light off
-    # when hitting left wall robot will have a number in hand
-    # compare number to index len(arr) - 1
-    # if len(arr) - 1 is higher then held number, swap
-    # move left
-    # compare item
-    # if item held < current position item, swap
-    # if swapped, turn on light
-    # repeat until robot hits left wall
+            # while robot can move left
+            # turn light off
+            # when hitting left wall robot will have a number in hand
+            # compare number to index len(arr) - 1
+            # if len(arr) - 1 is higher then held number, swap
+            # move left
+            # compare item
+            # if item held < current position item, swap
+            # if swapped, turn on light
+            # repeat until robot hits left wall
 
-# stop loop after a full pass of not sorting, robot will be holding index 0 item (lowest)
-# move all the way left
-# swap lowest with none
-# finished
+            self.set_light_off()
 
-        return
+        # stop loop after a full pass of not sorting, robot will be holding index 0 item (lowest)
+        # move all the way left
+        # swap lowest with none
+        # finished
+
+        return self._list
 
 
 if __name__ == "__main__":
     # Test our your implementation from the command line
     # with `python robot_sort.py`
 
-    test = [4, 3, 1, 5, 7]
+    test = [1, 4, 3, 2, 5, 2]
     robot = SortingRobot(test)
 
+    print(test)
     robot.sort()
     print(robot._list)
 
